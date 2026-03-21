@@ -21,7 +21,8 @@ export async function POST(request) {
       type: "recovery",
       email: email,
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/reset-password-update`,
+        // Point to client-side page that handles hash-fragment tokens from admin-generated links
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/recover`,
       },
     });
 

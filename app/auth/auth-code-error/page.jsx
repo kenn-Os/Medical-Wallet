@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { XCircle, ArrowLeft, RefreshCw } from 'lucide-react';
 
-export default function AuthCodeError({ searchParams }) {
-  const reason = searchParams?.reason;
+export default async function AuthCodeError({ searchParams }) {
+  const params = await searchParams;
+  const reason = params?.reason;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
