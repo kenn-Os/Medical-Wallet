@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
-    "@plunk/node": "^3.0.3",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.99.3",
     "clsx": "^2.1.1",
@@ -27,6 +26,7 @@
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.2.10",
     "react-hook-form": "^7.53.1",
+    "resend": "^6.9.4",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.4",
     "uuid": "^10.0.0",

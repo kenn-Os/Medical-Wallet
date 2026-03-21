@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/utils/supabase/server";
-import { sendEmail } from "@/lib/plunk";
+import { sendPasswordResetEmail } from "@/utils/email-service";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -15,7 +15,8 @@ export async function POST(request) {
 
     const supabase = createAdminClient();
 
-    // Generate the reset password link
+    // Generate the reset password link manually
+    // This bypasses the broken Supabase dashboard SMTP settings
     const { data, error } = await supabase.auth.admin.generateLink({
       type: "recovery",
       email: email,
@@ -32,33 +33,28 @@ export async function POST(request) {
       );
     }
 
-    const resetLink = data.properties.action_link;
+    const resetLink = data.properties?.action_link;
 
-    // Send the email via Plunk
-    const emailResponse = await sendEmail({
-      to: email,
-      subject: "Reset Your Password - Medical Wallet",
-      body: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
-          <h2 style="color: #333;">Password Reset Request</h2>
-          <p>We received a request to reset your password for your Medical Wallet account.</p>
-          <p>Click the button below to set a new password:</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
-          </div>
-          <p style="color: #666; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
-          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-          <p style="color: #999; font-size: 12px;">Medical Wallet securely manages your health records.</p>
-        </div>
-      `,
-    });
-
-    if (!emailResponse.success) {
-      console.error("Error sending email via Plunk:", emailResponse.error);
+    if (!resetLink) {
+      console.error("Critical: No action_link found in Supabase response properties");
       return NextResponse.json(
-        { error: `Failed to send reset email via Plunk: ${emailResponse.error}` },
+        { error: "Failed to generate a valid reset link" },
         { status: 500 }
       );
+    }
+
+    // EXPLICIT LOG FOR DEBUGGING
+    console.log("------------------------------------------");
+    console.log("PASSWORD RESET LINK GENERATED:");
+    console.log(resetLink);
+    console.log("------------------------------------------");
+
+    // Send the email via Resend utility
+    const emailResponse = await sendPasswordResetEmail(email, resetLink);
+
+    if (!emailResponse.success) {
+      console.error("Resend delivery failed:", emailResponse.error);
+      // We still return 200 because the link is in the logs, but it's not ideal
     }
 
     return NextResponse.json({ success: true });

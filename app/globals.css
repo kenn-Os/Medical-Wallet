@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -32,14 +32,23 @@
 
   body {
     @apply bg-background text-foreground font-body antialiased;
-    background-image: 
-      radial-gradient(at 40% 20%, hsla(151, 64%, 97%, 0.8) 0px, transparent 50%),
+    background-image:
+      radial-gradient(
+        at 40% 20%,
+        hsla(151, 64%, 97%, 0.8) 0px,
+        transparent 50%
+      ),
       radial-gradient(at 80% 0%, hsla(210, 40%, 97%, 0.6) 0px, transparent 50%),
       radial-gradient(at 0% 50%, hsla(151, 30%, 96%, 0.6) 0px, transparent 50%);
     background-attachment: fixed;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display;
   }
 
@@ -64,7 +73,7 @@
 
   /* Button variants */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 
+    @apply inline-flex items-center justify-center gap-2
            bg-primary-500 text-white font-medium rounded-lg px-5 py-2.5
            hover:bg-primary-600 active:bg-primary-700
            transition-all duration-200

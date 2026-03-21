@@ -11,7 +11,8 @@
     "NEXT_PUBLIC_APP_URL": "@next_public_app_url",
     "ENCRYPTION_SECRET": "@encryption_secret",
     "QR_SECRET": "@qr_secret",
-    "DOCTOR_ACCESS_SECRET": "@doctor_access_secret"
+    "DOCTOR_ACCESS_SECRET": "@doctor_access_secret",
+    "RESEND_API_KEY": "@resend_api_key"
   },
   "headers": [
     {
