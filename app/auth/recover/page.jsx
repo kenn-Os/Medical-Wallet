@@ -3,48 +3,59 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 export default function RecoverPage() {
   const router = useRouter();
   const [status, setStatus] = useState('Processing your request...');
 
   useEffect(() => {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    // Handle PKCE code in query params (comes from some Supabase flows)
+    // Standard client: can detect implicit-flow hash tokens (#access_token=...)
+    const supabaseStandard = createClient(supabaseUrl, supabaseKey);
+    // SSR client: stores session in cookies so the reset page can read it
+    const supabaseSSR = createBrowserClient(supabaseUrl, supabaseKey);
+
+    async function bridgeSession(accessToken, refreshToken) {
+      // Write the session to cookies via the SSR client
+      const { error } = await supabaseSSR.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+      if (error) {
+        console.error('[Recover] Failed to bridge session to cookies:', error.message);
+        router.replace('/auth/auth-code-error?reason=' + encodeURIComponent(error.message));
+        return;
+      }
+      setStatus('Link verified! Redirecting...');
+      router.replace('/reset-password-update');
+    }
+
+    // Handle PKCE code from query params (some Supabase configurations)
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
-
     if (code) {
-      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-        if (!error) {
-          router.replace('/reset-password-update');
-        } else {
+      supabaseStandard.auth.exchangeCodeForSession(code).then(({ data, error }) => {
+        if (error) {
           router.replace('/auth/auth-code-error?reason=' + encodeURIComponent(error.message));
+        } else {
+          bridgeSession(data.session.access_token, data.session.refresh_token);
         }
       });
       return;
     }
 
-    // Handle implicit flow: access_token in URL hash fragment
-    // Supabase JS automatically reads the hash and fires onAuthStateChange
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setStatus('Link verified! Redirecting...');
-        router.replace('/reset-password-update');
-      } else if (event === 'SIGNED_IN' && session) {
-        // Signed in via recovery token
-        setStatus('Link verified! Redirecting...');
-        router.replace('/reset-password-update');
-      } else if (event === 'TOKEN_REFRESHED') {
-        router.replace('/reset-password-update');
+    // Handle implicit flow: detect PASSWORD_RECOVERY event from hash token
+    const { data: { subscription } } = supabaseStandard.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY' && session) {
+        setStatus('Link verified! Bridging session...');
+        bridgeSession(session.access_token, session.refresh_token);
       }
     });
 
-    // Fallback: if nothing happens in 8 seconds, show error
+    // Fallback timeout
     const timeout = setTimeout(() => {
       router.replace('/auth/auth-code-error?reason=' + encodeURIComponent('Link could not be verified. It may have expired or already been used.'));
     }, 8000);
