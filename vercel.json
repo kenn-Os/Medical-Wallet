@@ -4,16 +4,6 @@
   "devCommand": "next dev",
   "installCommand": "npm install",
   "outputDirectory": ".next",
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
-    "NEXT_PUBLIC_APP_URL": "@next_public_app_url",
-    "ENCRYPTION_SECRET": "@encryption_secret",
-    "QR_SECRET": "@qr_secret",
-    "DOCTOR_ACCESS_SECRET": "@doctor_access_secret",
-    "RESEND_API_KEY": "@resend_api_key"
-  },
   "headers": [
     {
       "source": "/api/(.*)",
