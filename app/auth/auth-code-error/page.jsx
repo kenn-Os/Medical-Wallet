@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { XCircle, ArrowLeft, RefreshCw } from 'lucide-react';
 
-export default function AuthCodeError() {
+export default function AuthCodeError({ searchParams }) {
+  const reason = searchParams?.reason;
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
@@ -10,14 +12,21 @@ export default function AuthCodeError() {
         </div>
         
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Authentication Failed</h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 mb-4">
           The link you followed may have expired or was already used. Please try requesting a new password reset or login link.
         </p>
+
+        {reason && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6 text-left">
+            <p className="text-xs font-semibold text-red-700 mb-1">Error Details:</p>
+            <p className="text-xs text-red-600 break-words">{decodeURIComponent(reason)}</p>
+          </div>
+        )}
 
         <div className="space-y-3">
           <Link 
             href="/reset-password" 
-            className="flex items-center justify-center gap-2 w-full bg-primary-600 border border-transparent rounded-lg py-3 px-4 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+            className="flex items-center justify-center gap-2 w-full bg-black border border-transparent rounded-lg py-3 px-4 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
             Request New Link

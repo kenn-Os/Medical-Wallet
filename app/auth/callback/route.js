@@ -5,8 +5,16 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  // if "next" is in search params, use it as the redirection URL
   const next = searchParams.get("next") ?? "/dashboard";
+
+  // Supabase may redirect with an error directly (e.g. redirect URL not allowlisted)
+  const supabaseError = searchParams.get("error");
+  const supabaseErrorDescription = searchParams.get("error_description");
+  if (supabaseError) {
+    console.error("Supabase redirected with error:", supabaseError, supabaseErrorDescription);
+    const params = new URLSearchParams({ reason: supabaseErrorDescription || supabaseError });
+    return NextResponse.redirect(`${origin}/auth/auth-code-error?${params}`);
+  }
 
   if (code) {
     const cookieStore = await cookies();
@@ -30,10 +38,13 @@ export async function GET(request) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
-    
-    console.error("Auth callback error during code exchange:", error);
+    console.error("Auth callback error during code exchange:", error.message, error.status);
+    const params = new URLSearchParams({ reason: error.message });
+    return NextResponse.redirect(`${origin}/auth/auth-code-error?${params}`);
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  // No code and no error — something unexpected
+  console.error("Auth callback reached with no code and no error param. URL:", request.url);
+  const params = new URLSearchParams({ reason: "No authorization code was received. The link may be malformed." });
+  return NextResponse.redirect(`${origin}/auth/auth-code-error?${params}`);
 }
