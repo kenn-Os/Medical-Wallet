@@ -8,6 +8,7 @@ import { Lock, Trash2, Shield, Eye, EyeOff, Loader2, AlertTriangle } from 'lucid
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
+import DeleteAccountModal from './DeleteAccountModal'
 
 const passwordSchema = z.object({
   new_password: z.string().min(8, 'At least 8 characters').regex(/[A-Z]/, 'Needs uppercase').regex(/[0-9]/, 'Needs a number'),
@@ -17,6 +18,7 @@ const passwordSchema = z.object({
 export default function SettingsClient({ user }) {
   const router = useRouter()
   const [showNew, setShowNew] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(passwordSchema) })
 
@@ -28,16 +30,20 @@ export default function SettingsClient({ user }) {
   }
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm('Are you sure? This will permanently delete all your health records.')) return
-    if (!window.confirm('This CANNOT be undone. Are you absolutely sure?')) return
     setDeleting(true)
     try {
       const supabase = createClient()
-      await supabase.from('profiles').delete().eq('user_id', user.id)
+      const { error: profileError } = await supabase.from('profiles').delete().eq('user_id', user.id)
+      if (profileError) throw profileError
       await supabase.auth.signOut()
       router.push('/')
-    } catch { toast.error('Failed to delete account. Please contact support.') }
-    finally { setDeleting(false) }
+      router.refresh()
+    } catch (err) {
+      toast.error(err.message || 'Failed to delete account')
+      setShowDeleteModal(false)
+    } finally {
+      setDeleting(false)
+    }
   }
 
   return (
@@ -91,11 +97,18 @@ export default function SettingsClient({ user }) {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="card p-6 border-red-200 bg-red-50/30">
         <h3 className="font-display font-semibold text-red-800 mb-2 flex items-center gap-2"><AlertTriangle className="w-4 h-4" />Danger Zone</h3>
         <p className="text-sm text-red-700 mb-4">Deleting your account will permanently remove all your health records, documents, and data. This cannot be undone.</p>
-        <button onClick={handleDeleteAccount} disabled={deleting} className="btn-danger">
+        <button onClick={() => setShowDeleteModal(true)} disabled={deleting} className="btn-danger">
           {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
           {deleting ? 'Deleting...' : 'Delete Account'}
         </button>
       </motion.div>
+
+      <DeleteAccountModal
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteAccount}
+        deleting={deleting}
+      />
     </div>
   )
 }
