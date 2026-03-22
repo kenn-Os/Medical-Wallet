@@ -36,7 +36,7 @@ export default function ProfileClient({ userId, profile, userEmail }) {
   const [saved, setSaved] = useState(false);
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: {
       full_name: profile?.full_name || "",
       date_of_birth: profile?.date_of_birth || "",
@@ -52,6 +52,8 @@ export default function ProfileClient({ userId, profile, userEmail }) {
         profile?.emergency_contact_relationship || "",
     },
   });
+
+  const formValues = watch();
 
   const onSubmit = async (data) => {
     setSaving(true);
@@ -69,14 +71,15 @@ export default function ProfileClient({ userId, profile, userEmail }) {
     }
   };
 
-  const initials = getInitials(profile?.full_name || userEmail);
+  const initials = getInitials(formValues.full_name || userEmail);
   const completionFields = [
-    profile?.full_name,
-    profile?.date_of_birth,
-    profile?.blood_type && profile.blood_type !== "Unknown",
-    profile?.emergency_contact_name,
-    profile?.emergency_contact_phone,
-    profile?.phone,
+    formValues.full_name,
+    formValues.date_of_birth,
+    formValues.blood_type && formValues.blood_type !== "Unknown",
+    formValues.genotype && formValues.genotype !== "Unknown",
+    formValues.emergency_contact_name,
+    formValues.emergency_contact_phone,
+    formValues.phone,
   ];
   const completion = Math.round(
     (completionFields.filter(Boolean).length / completionFields.length) * 100,
