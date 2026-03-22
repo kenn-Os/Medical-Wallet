@@ -50,6 +50,9 @@ export default function SignupPage() {
         provider: 'google',
         options: {
           redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard`,
+          queryParams: {
+            prompt: 'select_account',
+          },
         },
       })
       if (error) throw error
