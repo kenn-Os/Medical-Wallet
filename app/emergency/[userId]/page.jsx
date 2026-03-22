@@ -39,9 +39,12 @@ export default async function EmergencyProfilePage({ params }) {
           {profile.date_of_birth && <p className="text-gray-500 mt-1">DOB: {new Date(profile.date_of_birth).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>}
         </div>
         <div className="rounded-2xl bg-red-50 border-2 border-red-200 p-6 text-center">
-          <Droplets className="w-8 h-8 text-red-500 mx-auto mb-2" />
-          <div className="text-sm font-medium text-red-600 uppercase tracking-wider mb-1">Blood Type</div>
-          <div className="font-display font-bold text-5xl text-red-700">{profile.blood_type}</div>
+          <div className="card p-6 border-red-100 bg-red-50/30">
+          <div className="text-sm font-medium text-red-600 uppercase tracking-wider mb-1">Blood / Genotype</div>
+          <div className="font-display font-bold text-5xl text-red-700">
+            {profile.blood_type} <span className="text-2xl text-red-500 opacity-75">/ {profile.genotype || 'Unknown'}</span>
+          </div>
+        </div>
         </div>
         <div className="rounded-2xl border-2 border-orange-200 bg-orange-50 p-5">
           <div className="flex items-center gap-2 mb-3"><AlertTriangle className="w-5 h-5 text-orange-600" /><h2 className="font-display font-bold text-orange-800 text-lg">ALLERGIES {allergies?.length > 0 ? `(${allergies.length})` : ''}</h2></div>

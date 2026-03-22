@@ -9,8 +9,11 @@ import { generateQRData } from '@/lib/encryption'
 export default function EmergencyQRClient({ userId, emergencyProfile, appUrl }) {
   const qrRef = useRef(null)
   const [showOfflineData, setShowOfflineData] = useState(false)
-  const emergencyUrl = `${appUrl}/emergency/${userId}`
-  const offlineData = generateQRData({ n: emergencyProfile.full_name, bt: emergencyProfile.blood_type, al: emergencyProfile.allergies.slice(0, 5).map(a => a.allergen), md: emergencyProfile.medications.slice(0, 5).map(m => m.name), cn: emergencyProfile.conditions.slice(0, 3).map(c => c.name), ec: emergencyProfile.emergency_contact_phone, en: emergencyProfile.emergency_contact_name })
+  const emergencyUrl = `${appUrl}/emergency/${userId}` // Shorten keys for smaller QR payload
+  const offlineData = generateQRData({ n: emergencyProfile.full_name, bt: emergencyProfile.blood_type, gt: emergencyProfile.genotype, al: emergencyProfile.allergies.slice(0, 5).map(a => a.allergen), md: emergencyProfile.medications.slice(0, 5).map(m => m.name), cn: emergencyProfile.conditions.slice(0, 3).map(c => c.name), ec: emergencyProfile.emergency_contact_phone, en: emergencyProfile.emergency_contact_name })
+  
+  // Create vCard for easy saving to contacts
+  const vCardData = `BEGIN:VCARD\nVERSION:3.0\nN:${emergencyProfile.full_name}\nTEL;TYPE=EMERGENCY:${emergencyProfile.emergency_contact_phone}\nNOTE:Blood Type: ${emergencyProfile.blood_type}\\nGenotype: ${emergencyProfile.genotype || 'Unknown'}\\nAllergies: ${emergencyProfile.allergies.map(a => a.allergen).join(', ')}\nEND:VCARD`
 
   const downloadQR = () => {
     const svg = qrRef.current?.querySelector('svg')
@@ -31,7 +34,7 @@ export default function EmergencyQRClient({ userId, emergencyProfile, appUrl }) 
   }
 
   const copyLink = async () => { await navigator.clipboard.writeText(emergencyUrl); toast.success('Emergency profile link copied!') }
-  const hasProfile = emergencyProfile.blood_type !== 'Unknown' || emergencyProfile.allergies.length > 0 || emergencyProfile.medications.length > 0
+  const hasProfile = emergencyProfile.blood_type !== 'Unknown' || emergencyProfile.genotype !== 'Unknown' || emergencyProfile.allergies.length > 0 || emergencyProfile.medications.length > 0
 
   return (
     <div className="page-container max-w-4xl">
@@ -40,7 +43,7 @@ export default function EmergencyQRClient({ userId, emergencyProfile, appUrl }) 
       {!hasProfile && (
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
           <Info className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
-          <p className="text-sm text-amber-800">Your emergency profile is incomplete. Add your blood type, allergies, and medications in your <a href="/profile" className="underline font-medium">profile</a> and <a href="/records" className="underline font-medium">health records</a>.</p>
+          <p className="text-sm text-amber-800">Your emergency profile is incomplete. Add your blood type, genotype, allergies, and medications in your <a href="/profile" className="underline font-medium">profile</a> and <a href="/records" className="underline font-medium">health records</a>.</p>
         </motion.div>
       )}
 
@@ -62,9 +65,11 @@ export default function EmergencyQRClient({ userId, emergencyProfile, appUrl }) 
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card p-6">
           <h3 className="font-display font-semibold text-gray-900 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-primary-600" />Emergency Profile Preview</h3>
           <div className="space-y-4">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-red-50 border border-red-100">
-              <Droplets className="w-5 h-5 text-red-500 shrink-0" />
-              <div><p className="text-xs text-gray-500">Blood Type</p><p className="font-display font-semibold text-red-700 text-lg">{emergencyProfile.blood_type}</p></div>
+            <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-red-50/50 p-4 rounded-xl border border-red-100 text-center">
+                    <p className="text-xs text-gray-500 mb-1">Blood / Genotype</p>
+                    <p className="font-display font-semibold text-red-700 text-lg">{emergencyProfile.blood_type} / {emergencyProfile.genotype || 'Unknown'}</p>
+                  </div>
             </div>
             <div>
               <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-orange-500" /><span className="text-sm font-medium text-gray-700">Allergies ({emergencyProfile.allergies.length})</span></div>

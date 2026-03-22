@@ -77,9 +77,11 @@ export default async function DoctorAccessPage({ params }) {
                 {profile.nationality && <span>{profile.nationality}</span>}
               </div>
             </div>
-            <div className="text-center">
-              <div className="text-xs text-gray-500 mb-1">Blood Type</div>
-              <div className="font-display font-bold text-2xl text-red-600">{profile.blood_type}</div>
+            <div className="text-center bg-red-50/50 p-4 rounded-xl border border-red-100">
+              <div className="text-xs text-gray-500 mb-1">Blood / Genotype</div>
+              <div className="font-display font-bold text-2xl text-red-600">
+                {profile.blood_type} <span className="text-lg text-red-400 opacity-80">/ {profile.genotype || 'Unknown'}</span>
+              </div>
             </div>
           </div>
         </div>

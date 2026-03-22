@@ -17,16 +17,9 @@ import { saveProfile } from "@/lib/actions/profile";
 import { getInitials } from "@/lib/utils";
 
 const BLOOD_TYPES = [
-  "A+",
-  "A-",
-  "B+",
-  "B-",
-  "AB+",
-  "AB-",
-  "O+",
-  "O-",
-  "Unknown",
+  "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown",
 ];
+const GENOTYPES = ["AA", "AS", "AC", "SS", "SC", "Unknown"];
 const GENDERS = ["Male", "Female", "Non-binary", "Prefer not to say"];
 const RELATIONSHIPS = [
   "Spouse",
@@ -52,6 +45,7 @@ export default function ProfileClient({ userId, profile, userEmail }) {
       phone: profile?.phone || "",
       address: profile?.address || "",
       blood_type: profile?.blood_type || "Unknown",
+      genotype: profile?.genotype || "Unknown",
       emergency_contact_name: profile?.emergency_contact_name || "",
       emergency_contact_phone: profile?.emergency_contact_phone || "",
       emergency_contact_relationship:
@@ -210,7 +204,25 @@ export default function ProfileClient({ userId, profile, userEmail }) {
               </label>
             ))}
           </div>
+
+          <label className="label mt-6">Genotype</label>
+          <div className="flex flex-wrap gap-3 mt-3">
+            {GENOTYPES.map((gt) => (
+              <label key={gt} className="cursor-pointer">
+                <input
+                  {...register("genotype")}
+                  type="radio"
+                  value={gt}
+                  className="sr-only peer"
+                />
+                <div className="px-4 py-2 rounded-xl border-2 border-gray-200 text-center text-sm font-semibold text-gray-600 peer-checked:border-red-400 peer-checked:bg-red-50 peer-checked:text-red-700 hover:border-gray-300 transition-all cursor-pointer min-w-[3rem] flex items-center justify-center">
+                  {gt}
+                </div>
+              </label>
+            ))}
+          </div>
         </motion.div>
+
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}

@@ -11,6 +11,7 @@ export default function DashboardClient({ profile, allergies, medications, condi
   const activeTokens = accessTokens.filter(t => !isExpired(t.expires_at))
   const stats = [
     { label: 'Blood Type', value: profile?.blood_type || '—', icon: Droplets, color: 'text-red-600', bg: 'bg-red-50', href: '/profile' },
+    { label: 'Genotype', value: profile?.genotype || '—', icon: Activity, color: 'text-rose-600', bg: 'bg-rose-50', href: '/profile' },
     { label: 'Allergies', value: allergies.length, icon: AlertTriangle, color: 'text-orange-600', bg: 'bg-orange-50', href: '/records' },
     { label: 'Medications', value: medications.length, icon: Pill, color: 'text-blue-600', bg: 'bg-blue-50', href: '/records' },
     { label: 'Conditions', value: conditions.length, icon: Activity, color: 'text-purple-600', bg: 'bg-purple-50', href: '/records' },
@@ -45,7 +46,7 @@ export default function DashboardClient({ profile, allergies, medications, condi
           const Icon = stat.icon
           return (
             <motion.div key={stat.label} variants={item}>
-              <Link href={stat.href} className="card card-hover p-4 flex flex-col items-start gap-3 block">
+              <Link href={stat.href} className="card card-hover p-4 flex flex-col items-start gap-3">
                 <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center', stat.bg)}><Icon className={cn('w-4 h-4', stat.color)} /></div>
                 <div><div className="font-display font-semibold text-xl text-gray-900">{stat.value}</div><div className="text-xs text-gray-500 mt-0.5">{stat.label}</div></div>
               </Link>
