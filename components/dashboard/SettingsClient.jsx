@@ -9,6 +9,8 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import DeleteAccountModal from './DeleteAccountModal'
+import TwoFactorCard from './TwoFactorCard'
+import AuditLogsCard from './AuditLogsCard'
 
 const passwordSchema = z.object({
   new_password: z.string().min(8, 'At least 8 characters').regex(/[A-Z]/, 'Needs uppercase').regex(/[0-9]/, 'Needs a number'),
@@ -85,14 +87,17 @@ export default function SettingsClient({ user }) {
         </form>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card p-6 mb-5 bg-primary-50/30 border-primary-100">
-        <h3 className="font-display font-semibold text-gray-900 mb-3 flex items-center gap-2"><Shield className="w-4 h-4 text-primary-600" />Security & Privacy</h3>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card p-6 mb-5 bg-primary-50/30 dark:bg-primary-500/5 border-primary-100 dark:border-primary-500/20">
+        <h3 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-3 flex items-center gap-2"><Shield className="w-4 h-4 text-primary-600 dark:text-primary-500" />Security & Privacy</h3>
         <ul className="space-y-2">
           {['All medical records are encrypted with AES-256', 'Row-level security ensures only you can access your data', 'Doctor access tokens expire automatically', 'All data access is audit logged', 'We never sell or share your health information'].map(item => (
-            <li key={item} className="flex items-center gap-2 text-sm text-gray-600"><div className="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />{item}</li>
+            <li key={item} className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400"><div className="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />{item}</li>
           ))}
         </ul>
       </motion.div>
+
+      <TwoFactorCard user={user} />
+      <AuditLogsCard />
 
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="card p-6 border-red-200 bg-red-50/30">
         <h3 className="font-display font-semibold text-red-800 mb-2 flex items-center gap-2"><AlertTriangle className="w-4 h-4" />Danger Zone</h3>

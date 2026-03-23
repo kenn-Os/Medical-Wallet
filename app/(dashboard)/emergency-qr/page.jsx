@@ -13,6 +13,7 @@ export default async function EmergencyQRPage() {
     supabase.from('conditions').select('name, status').eq('user_id', user.id),
   ])
   const emergencyProfile = {
+    universal_health_id: profile?.universal_health_id || null,
     full_name: profile?.full_name || 'Unknown', blood_type: profile?.blood_type || 'Unknown',
     allergies: allergies || [], medications: medications || [], conditions: conditions || [],
     emergency_contact_name: profile?.emergency_contact_name || null,

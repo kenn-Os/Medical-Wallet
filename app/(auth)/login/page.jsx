@@ -20,6 +20,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
+  
+  // MFA State
+  const [showMfa, setShowMfa] = useState(false)
+  const [mfaCode, setMfaCode] = useState('')
+  const [factorId, setFactorId] = useState(null)
+
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) })
 
   const onSubmit = async (data) => {
@@ -28,12 +34,55 @@ export default function LoginPage() {
       const supabase = createClient()
       const { error } = await supabase.auth.signInWithPassword({ email: data.email, password: data.password })
       if (error) throw error
+
+      const { data: mfaData, error: mfaError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+      if (mfaError) throw mfaError
+
+      if (mfaData.nextLevel === 'aal2' && mfaData.nextLevel !== mfaData.currentLevel) {
+        const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors()
+        if (factorsError) throw factorsError
+        
+        const totpFactor = factors.totp[0]
+        if (totpFactor) {
+          setFactorId(totpFactor.id)
+          setShowMfa(true)
+          setLoading(false)
+          return
+        }
+      }
+
       toast.success('Welcome back!')
       router.push('/dashboard')
       router.refresh()
     } catch (err) {
       toast.error(err.message || 'Login failed')
-    } finally { setLoading(false) }
+      setLoading(false)
+    }
+  }
+
+  const handleMfaVerify = async (e) => {
+    e.preventDefault()
+    if (mfaCode.length < 6) return toast.error('Please enter a 6-digit code')
+    setLoading(true)
+    try {
+      const supabase = createClient()
+      const { data: challenge, error: challengeError } = await supabase.auth.mfa.challenge({ factorId })
+      if (challengeError) throw challengeError
+
+      const { error } = await supabase.auth.mfa.verify({
+        factorId,
+        challengeId: challenge.id,
+        code: mfaCode
+      })
+      if (error) throw error
+
+      toast.success('Welcome back!')
+      router.push('/dashboard')
+      router.refresh()
+    } catch (err) {
+      toast.error(err.message || 'Invalid verification code')
+      setLoading(false)
+    }
   }
 
   const handleGoogleSignIn = async () => {
@@ -88,30 +137,51 @@ export default function LoginPage() {
           <div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or sign in with email</span></div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div>
-            <label className="label">Email address</label>
-            <input {...register('email')} type="email" placeholder="you@example.com" className="input" autoComplete="email" />
-            {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="label mb-0">Password</label>
-              <Link href="/reset-password" className="text-xs text-primary-600 hover:text-primary-700">Forgot password?</Link>
+        {showMfa ? (
+          <form onSubmit={handleMfaVerify} className="space-y-5">
+            <div>
+              <label className="label text-center">Enter your 6-digit Authenticator code</label>
+              <input 
+                type="text" 
+                maxLength={6} 
+                value={mfaCode} 
+                onChange={e => setMfaCode(e.target.value.replace(/\D/g, ''))} 
+                className="input text-center font-mono text-xl tracking-[0.5em] py-3" 
+                placeholder="000000" 
+                autoFocus
+              />
             </div>
-            <div className="relative">
-              <input {...register('password')} type={showPassword ? 'text' : 'password'} placeholder="••••••••" className="input pr-10" autoComplete="current-password" />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
+            <button type="submit" disabled={loading || mfaCode.length !== 6} className="btn-primary w-full py-3 justify-center">
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Verify Code'}
+            </button>
+            <button type="button" onClick={() => { setShowMfa(false); createClient().auth.signOut() }} className="btn-ghost w-full py-2 justify-center text-sm">Cancel</button>
+          </form>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div>
+              <label className="label">Email address</label>
+              <input {...register('email')} type="email" placeholder="you@example.com" className="input" autoComplete="email" />
+              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
             </div>
-            {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>}
-          </div>
-          <button type="submit" disabled={loading} className="btn-primary w-full py-3">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
-            {loading ? 'Signing in...' : 'Sign in'}
-          </button>
-        </form>
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="label mb-0">Password</label>
+                <Link href="/reset-password" className="text-xs text-primary-600 hover:text-primary-700">Forgot password?</Link>
+              </div>
+              <div className="relative">
+                <input {...register('password')} type={showPassword ? 'text' : 'password'} placeholder="••••••••" className="input pr-10" autoComplete="current-password" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>}
+            </div>
+            <button type="submit" disabled={loading} className="btn-primary w-full py-3 justify-center">
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
+          </form>
+        )}
         <p className="text-center text-sm text-gray-500 mt-6">
           Don&apos;t have an account?{' '}
           <Link href="/signup" className="text-primary-600 hover:text-primary-700 font-medium">Create wallet</Link>

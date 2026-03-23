@@ -38,20 +38,28 @@ export default function EmergencyQRClient({ userId, emergencyProfile, appUrl }) 
 
   return (
     <div className="page-container max-w-4xl">
-      <div className="mb-6"><h2 className="font-display font-semibold text-xl text-gray-900">Emergency QR Code</h2><p className="text-sm text-gray-500 mt-0.5">Share critical health info with first responders</p></div>
+      <div className="mb-6"><h2 className="font-display font-semibold text-xl text-gray-900 dark:text-zinc-100">Emergency QR Code</h2><p className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">Share critical health info with first responders</p></div>
 
       {!hasProfile && (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 flex items-start gap-3">
           <Info className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
-          <p className="text-sm text-amber-800">Your emergency profile is incomplete. Add your blood type, genotype, allergies, and medications in your <a href="/profile" className="underline font-medium">profile</a> and <a href="/records" className="underline font-medium">health records</a>.</p>
+          <p className="text-sm text-amber-800 dark:text-amber-200">Your emergency profile is incomplete. Add your blood type, genotype, allergies, and medications in your <a href="/profile" className="underline font-medium">profile</a> and <a href="/records" className="underline font-medium">health records</a>.</p>
         </motion.div>
       )}
 
       <div className="grid lg:grid-cols-2 gap-6">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
-          <h3 className="font-display font-semibold text-gray-900 mb-4 flex items-center gap-2"><QrCode className="w-4 h-4 text-primary-600" />Your Emergency QR</h3>
+          <h3 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-4 flex items-center gap-2"><QrCode className="w-4 h-4 text-primary-600 dark:text-primary-500" />Your Emergency QR</h3>
+          
+          {emergencyProfile.universal_health_id && (
+            <div className="mb-6 bg-primary-50 dark:bg-primary-500/10 border border-primary-100 dark:border-primary-500/20 p-3 rounded-xl text-center">
+              <p className="text-xs text-primary-600 dark:text-primary-400 mb-0.5 font-medium">Global Health ID</p>
+              <p className="font-mono text-lg font-bold tracking-widest text-primary-900 dark:text-primary-100">{emergencyProfile.universal_health_id}</p>
+            </div>
+          )}
+
           <div ref={qrRef} className="flex justify-center mb-6">
-            <div className="p-5 bg-white border-2 border-gray-100 rounded-2xl shadow-inner">
+            <div className="p-5 bg-white border-2 border-gray-100 dark:border-zinc-800 rounded-2xl shadow-inner">
               <QRCodeSVG value={emergencyUrl} size={220} level="H" includeMargin={false} />
             </div>
           </div>
@@ -59,40 +67,40 @@ export default function EmergencyQRClient({ userId, emergencyProfile, appUrl }) 
             <button onClick={downloadQR} className="btn-primary w-full justify-center"><Download className="w-4 h-4" />Download QR Code</button>
             <button onClick={copyLink} className="btn-secondary w-full justify-center"><Share2 className="w-4 h-4" />Copy Emergency Link</button>
           </div>
-          <div className="mt-4 p-3 rounded-xl bg-gray-50 border border-gray-100"><p className="text-xs text-gray-500 text-center break-all font-mono">{emergencyUrl}</p></div>
+          <div className="mt-4 p-3 rounded-xl bg-gray-50 dark:bg-zinc-800/50 border border-gray-100 dark:border-zinc-800/50"><p className="text-xs text-gray-500 dark:text-zinc-400 text-center break-all font-mono">{emergencyUrl}</p></div>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card p-6">
-          <h3 className="font-display font-semibold text-gray-900 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-primary-600" />Emergency Profile Preview</h3>
+          <h3 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-4 flex items-center gap-2"><Shield className="w-4 h-4 text-primary-600 dark:text-primary-500" />Emergency Profile Preview</h3>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-red-50/50 p-4 rounded-xl border border-red-100 text-center">
-                    <p className="text-xs text-gray-500 mb-1">Blood / Genotype</p>
-                    <p className="font-display font-semibold text-red-700 text-lg">{emergencyProfile.blood_type} / {emergencyProfile.genotype || 'Unknown'}</p>
+                  <div className="bg-red-50/50 dark:bg-red-500/10 p-4 rounded-xl border border-red-100 dark:border-red-500/20 text-center">
+                    <p className="text-xs text-gray-500 dark:text-zinc-400 mb-1">Blood / Genotype</p>
+                    <p className="font-display font-semibold text-red-700 dark:text-red-400 text-lg">{emergencyProfile.blood_type} / {emergencyProfile.genotype || 'Unknown'}</p>
                   </div>
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-orange-500" /><span className="text-sm font-medium text-gray-700">Allergies ({emergencyProfile.allergies.length})</span></div>
-              {!emergencyProfile.allergies.length ? <p className="text-xs text-gray-400 pl-6">None recorded</p> : (
-                <div className="pl-6 flex flex-wrap gap-1.5">{emergencyProfile.allergies.map((a, i) => <span key={i} className="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-xs text-orange-700 font-medium">{a.allergen}</span>)}</div>
+              <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-orange-500" /><span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Allergies ({emergencyProfile.allergies.length})</span></div>
+              {!emergencyProfile.allergies.length ? <p className="text-xs text-gray-400 dark:text-zinc-500 pl-6">None recorded</p> : (
+                <div className="pl-6 flex flex-wrap gap-1.5">{emergencyProfile.allergies.map((a, i) => <span key={i} className="px-2.5 py-0.5 rounded-full bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 text-xs text-orange-700 dark:text-orange-400 font-medium">{a.allergen}</span>)}</div>
               )}
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-2"><Pill className="w-4 h-4 text-blue-500" /><span className="text-sm font-medium text-gray-700">Medications ({emergencyProfile.medications.length})</span></div>
-              {!emergencyProfile.medications.length ? <p className="text-xs text-gray-400 pl-6">None recorded</p> : (
-                <div className="pl-6 space-y-1">{emergencyProfile.medications.map((m, i) => <div key={i} className="text-sm text-gray-700">{m.name}{m.dosage ? ` — ${m.dosage}` : ''}</div>)}</div>
+              <div className="flex items-center gap-2 mb-2"><Pill className="w-4 h-4 text-blue-500" /><span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Medications ({emergencyProfile.medications.length})</span></div>
+              {!emergencyProfile.medications.length ? <p className="text-xs text-gray-400 dark:text-zinc-500 pl-6">None recorded</p> : (
+                <div className="pl-6 space-y-1">{emergencyProfile.medications.map((m, i) => <div key={i} className="text-sm text-gray-700 dark:text-zinc-300">{m.name}{m.dosage ? ` — ${m.dosage}` : ''}</div>)}</div>
               )}
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-purple-500" /><span className="text-sm font-medium text-gray-700">Conditions ({emergencyProfile.conditions.length})</span></div>
-              {!emergencyProfile.conditions.length ? <p className="text-xs text-gray-400 pl-6">None recorded</p> : (
-                <div className="pl-6 space-y-1">{emergencyProfile.conditions.map((c, i) => <div key={i} className="text-sm text-gray-700">{c.name}</div>)}</div>
+              <div className="flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-purple-500" /><span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Conditions ({emergencyProfile.conditions.length})</span></div>
+              {!emergencyProfile.conditions.length ? <p className="text-xs text-gray-400 dark:text-zinc-500 pl-6">None recorded</p> : (
+                <div className="pl-6 space-y-1">{emergencyProfile.conditions.map((c, i) => <div key={i} className="text-sm text-gray-700 dark:text-zinc-300">{c.name}</div>)}</div>
               )}
             </div>
             {emergencyProfile.emergency_contact_name && (
-              <div className="p-3 rounded-xl bg-green-50 border border-green-100 flex items-center gap-3">
-                <Phone className="w-4 h-4 text-green-600 shrink-0" />
-                <div><p className="text-xs text-gray-500">Emergency Contact</p><p className="text-sm font-medium text-gray-900">{emergencyProfile.emergency_contact_name}</p>{emergencyProfile.emergency_contact_phone && <p className="text-sm text-green-700 font-mono">{emergencyProfile.emergency_contact_phone}</p>}</div>
+              <div className="p-3 rounded-xl bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20 flex items-center gap-3">
+                <Phone className="w-4 h-4 text-green-600 dark:text-green-400 shrink-0" />
+                <div><p className="text-xs text-gray-500 dark:text-zinc-400">Emergency Contact</p><p className="text-sm font-medium text-gray-900 dark:text-zinc-100">{emergencyProfile.emergency_contact_name}</p>{emergencyProfile.emergency_contact_phone && <p className="text-sm text-green-700 dark:text-green-400 font-mono">{emergencyProfile.emergency_contact_phone}</p>}</div>
               </div>
             )}
           </div>
@@ -101,17 +109,17 @@ export default function EmergencyQRClient({ userId, emergencyProfile, appUrl }) 
 
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6 card p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0"><CheckCircle className="w-5 h-5 text-primary-600" /></div>
+          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center shrink-0"><CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-500" /></div>
           <div className="flex-1">
-            <h4 className="font-display font-semibold text-gray-900 mb-1">Offline Emergency Access</h4>
-            <p className="text-sm text-gray-500 mb-3">Your QR code links to your online emergency profile and contains encrypted data for offline use — first responders can read your critical info even without internet.</p>
-            <button onClick={() => setShowOfflineData(!showOfflineData)} className="text-xs text-primary-600 font-medium">{showOfflineData ? 'Hide' : 'Show'} encrypted offline data</button>
-            {showOfflineData && <div className="mt-3 p-3 rounded-xl bg-gray-50 border border-gray-100"><p className="text-xs text-gray-400 mb-1 font-medium">Encrypted payload (AES-256):</p><p className="text-xs font-mono text-gray-500 break-all">{offlineData.slice(0, 120)}...</p></div>}
+            <h4 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-1">Offline Emergency Access</h4>
+            <p className="text-sm text-gray-500 dark:text-zinc-400 mb-3">Your QR code links to your online emergency profile and contains encrypted data for offline use — first responders can read your critical info even without internet.</p>
+            <button onClick={() => setShowOfflineData(!showOfflineData)} className="text-xs text-primary-600 dark:text-primary-400 font-medium">{showOfflineData ? 'Hide' : 'Show'} encrypted offline data</button>
+            {showOfflineData && <div className="mt-3 p-3 rounded-xl bg-gray-50 dark:bg-zinc-800/50 border border-gray-100 dark:border-zinc-800/50"><p className="text-xs text-gray-400 dark:text-zinc-500 mb-1 font-medium">Encrypted payload (AES-256):</p><p className="text-xs font-mono text-gray-500 dark:text-zinc-400 break-all">{offlineData.slice(0, 120)}...</p></div>}
           </div>
         </div>
         <div className="mt-4 grid sm:grid-cols-3 gap-3">
           {[{ title: 'Print on ID card', desc: 'Download and laminate for your wallet' }, { title: 'Medical bracelet', desc: 'Use the QR with engraving services' }, { title: 'Phone lock screen', desc: 'Set as wallpaper for quick access' }].map(tip => (
-            <div key={tip.title} className="p-3 rounded-xl bg-primary-50/50 border border-primary-100"><p className="text-xs font-semibold text-primary-800">{tip.title}</p><p className="text-xs text-primary-600 mt-0.5">{tip.desc}</p></div>
+            <div key={tip.title} className="p-3 rounded-xl bg-primary-50/50 dark:bg-primary-500/10 border border-primary-100 dark:border-primary-500/20"><p className="text-xs font-semibold text-primary-800 dark:text-primary-200">{tip.title}</p><p className="text-xs text-primary-600 dark:text-primary-400 mt-0.5">{tip.desc}</p></div>
           ))}
         </div>
       </motion.div>

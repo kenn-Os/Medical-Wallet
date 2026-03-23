@@ -96,18 +96,18 @@ export default function ProfileClient({ userId, profile, userEmail }) {
           {initials}
         </div>
         <div>
-          <h2 className="font-display font-semibold text-xl text-gray-900">
+          <h2 className="font-display font-semibold text-xl text-gray-900 dark:text-zinc-100">
             {profile?.full_name || "Your Profile"}
           </h2>
-          <p className="text-sm text-gray-500">{userEmail}</p>
+          <p className="text-sm text-gray-500 dark:text-zinc-400">{userEmail}</p>
           <div className="flex items-center gap-2 mt-2">
-            <div className="h-1.5 w-32 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-1.5 w-32 bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
               <div
                 className="h-full bg-primary-500 rounded-full transition-all"
                 style={{ width: `${completion}%` }}
               />
             </div>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-zinc-400">
               {completion}% complete
             </span>
           </div>
@@ -121,8 +121,8 @@ export default function ProfileClient({ userId, profile, userEmail }) {
           transition={{ delay: 0.05 }}
           className="card p-6"
         >
-          <h3 className="font-display font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <User className="w-4 h-4 text-primary-600" />
+          <h3 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+            <User className="w-4 h-4 text-primary-600 dark:text-primary-500" />
             Personal Information
           </h3>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -134,6 +134,15 @@ export default function ProfileClient({ userId, profile, userEmail }) {
                 placeholder="John Doe"
               />
             </div>
+            {profile?.universal_health_id && (
+              <div className="sm:col-span-2">
+                <label className="label">Universal Health ID</label>
+                <div className="input font-mono bg-gray-50 dark:bg-zinc-800/50 text-gray-500 dark:text-zinc-400 cursor-not-allowed">
+                  {profile.universal_health_id}
+                </div>
+                <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">This is your unique global identifier. It cannot be changed.</p>
+              </div>
+            )}
             <div>
               <label className="label">Date of Birth</label>
               <input
@@ -187,8 +196,8 @@ export default function ProfileClient({ userId, profile, userEmail }) {
           transition={{ delay: 0.1 }}
           className="card p-6"
         >
-          <h3 className="font-display font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Droplets className="w-4 h-4 text-red-500" />
+          <h3 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+            <Droplets className="w-4 h-4 text-red-500 dark:text-red-400" />
             Medical Identifiers
           </h3>
           <label className="label">Blood Type</label>
@@ -201,7 +210,7 @@ export default function ProfileClient({ userId, profile, userEmail }) {
                   value={bt}
                   className="sr-only peer"
                 />
-                <div className="px-4 py-2 rounded-xl border-2 border-gray-200 text-center text-sm font-semibold text-gray-600 peer-checked:border-red-400 peer-checked:bg-red-50 peer-checked:text-red-700 hover:border-gray-300 transition-all cursor-pointer min-w-[3rem] flex items-center justify-center">
+                <div className="px-4 py-2 rounded-xl border-2 border-gray-200 dark:border-zinc-700 text-center text-sm font-semibold text-gray-600 dark:text-zinc-400 peer-checked:border-red-400 dark:peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-500/10 peer-checked:text-red-700 dark:peer-checked:text-red-400 hover:border-gray-300 dark:hover:border-zinc-600 transition-all cursor-pointer min-w-[3rem] flex items-center justify-center">
                   {bt}
                 </div>
               </label>
@@ -218,7 +227,7 @@ export default function ProfileClient({ userId, profile, userEmail }) {
                   value={gt}
                   className="sr-only peer"
                 />
-                <div className="px-4 py-2 rounded-xl border-2 border-gray-200 text-center text-sm font-semibold text-gray-600 peer-checked:border-red-400 peer-checked:bg-red-50 peer-checked:text-red-700 hover:border-gray-300 transition-all cursor-pointer min-w-[3rem] flex items-center justify-center">
+                <div className="px-4 py-2 rounded-xl border-2 border-gray-200 dark:border-zinc-700 text-center text-sm font-semibold text-gray-600 dark:text-zinc-400 peer-checked:border-red-400 dark:peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-500/10 peer-checked:text-red-700 dark:peer-checked:text-red-400 hover:border-gray-300 dark:hover:border-zinc-600 transition-all cursor-pointer min-w-[3rem] flex items-center justify-center">
                   {gt}
                 </div>
               </label>
@@ -233,11 +242,11 @@ export default function ProfileClient({ userId, profile, userEmail }) {
           transition={{ delay: 0.15 }}
           className="card p-6"
         >
-          <h3 className="font-display font-semibold text-gray-900 mb-1 flex items-center gap-2">
-            <Heart className="w-4 h-4 text-red-500" />
+          <h3 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-1 flex items-center gap-2">
+            <Heart className="w-4 h-4 text-red-500 dark:text-red-400" />
             Emergency Contact
           </h3>
-          <p className="text-xs text-gray-400 mb-4">
+          <p className="text-xs text-gray-400 dark:text-zinc-500 mb-4">
             This information appears on your emergency profile
           </p>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -266,7 +275,7 @@ export default function ProfileClient({ userId, profile, userEmail }) {
             <div className="sm:col-span-2">
               <label className="label">Contact Phone</label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-zinc-500" />
                 <input
                   {...register("emergency_contact_phone")}
                   type="tel"

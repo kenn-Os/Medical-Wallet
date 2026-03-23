@@ -1,6 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { Bell } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const pageTitles = {
   "/dashboard": { title: "Dashboard", description: "Your health overview" },
@@ -34,20 +35,23 @@ export default function TopBar() {
   const pathname = usePathname();
   const page = pageTitles[pathname] || { title: "MedWallet", description: "" };
   return (
-    <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+    <header className="sticky top-0 z-20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-gray-100 dark:border-zinc-800/50 px-6 py-4 flex items-center justify-between transition-colors">
       <div className="pl-10 lg:pl-0">
-        <h1 className="font-display font-semibold text-lg text-gray-900">
+        <h1 className="font-display font-semibold text-lg text-gray-900 dark:text-zinc-100">
           {page.title}
         </h1>
         {page.description && (
-          <p className="text-xs text-gray-500 mt-0.5 hidden sm:block">
+          <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5 hidden sm:block">
             {page.description}
           </p>
         )}
       </div>
-      <button className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
-        <Bell className="w-5 h-5" />
-      </button>
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+        <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-colors">
+          <Bell className="w-5 h-5" />
+        </button>
+      </div>
     </header>
   );
 }

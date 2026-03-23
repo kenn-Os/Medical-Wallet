@@ -31,7 +31,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background dark:bg-zinc-950 text-foreground dark:text-zinc-50 font-body antialiased;
     background-image:
       radial-gradient(
         at 40% 20%,
@@ -41,6 +41,17 @@
       radial-gradient(at 80% 0%, hsla(210, 40%, 97%, 0.6) 0px, transparent 50%),
       radial-gradient(at 0% 50%, hsla(151, 30%, 96%, 0.6) 0px, transparent 50%);
     background-attachment: fixed;
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(
+        at 40% 20%,
+        hsla(151, 64%, 20%, 0.15) 0px,
+        transparent 50%
+      ),
+      radial-gradient(at 80% 0%, hsla(240, 10%, 20%, 0.3) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsla(151, 30%, 20%, 0.15) 0px, transparent 50%);
   }
 
   h1,
@@ -64,11 +75,11 @@
 @layer components {
   /* Card styles */
   .card {
-    @apply bg-white rounded-xl border border-border shadow-card;
+    @apply bg-white dark:bg-zinc-900 dark:text-zinc-100 rounded-xl border border-border dark:border-zinc-800 shadow-card dark:shadow-none;
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5;
+    @apply transition-all duration-300 hover:shadow-card-hover dark:hover:shadow-none dark:hover:bg-zinc-800/80 hover:-translate-y-0.5;
   }
 
   /* Button variants */
@@ -83,12 +94,12 @@
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2
-           bg-white text-gray-700 font-medium rounded-lg px-5 py-2.5
-           border border-border
-           hover:bg-gray-50 active:bg-gray-100
+           bg-white dark:bg-zinc-900 text-gray-700 dark:text-zinc-300 font-medium rounded-lg px-5 py-2.5
+           border border-border dark:border-zinc-700
+           hover:bg-gray-50 dark:hover:bg-zinc-800 active:bg-gray-100 dark:active:bg-zinc-700
            transition-all duration-200
            disabled:opacity-50 disabled:cursor-not-allowed
-           shadow-sm;
+           shadow-sm dark:shadow-none;
   }
 
   .btn-danger {
@@ -102,16 +113,16 @@
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2
-           text-gray-600 font-medium rounded-lg px-4 py-2
-           hover:bg-gray-100 active:bg-gray-200
+           text-gray-600 dark:text-zinc-400 font-medium rounded-lg px-4 py-2
+           hover:bg-gray-100 dark:hover:bg-zinc-800 active:bg-gray-200 dark:active:bg-zinc-700
            transition-all duration-200;
   }
 
   /* Input styles */
   .input {
-    @apply w-full px-4 py-2.5 rounded-lg border border-border
-           bg-white text-foreground
-           placeholder:text-muted-foreground
+    @apply w-full px-4 py-2.5 rounded-lg border border-border dark:border-zinc-700
+           bg-white dark:bg-zinc-900 text-foreground dark:text-zinc-100
+           placeholder:text-muted-foreground dark:placeholder:text-zinc-500
            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
            transition-all duration-200
            disabled:opacity-50 disabled:cursor-not-allowed
@@ -119,7 +130,7 @@
   }
 
   .label {
-    @apply block text-sm font-medium text-foreground mb-1.5;
+    @apply block text-sm font-medium text-foreground dark:text-zinc-300 mb-1.5;
   }
 
   /* Badge styles */
@@ -137,12 +148,12 @@
   /* Sidebar nav item */
   .nav-item {
     @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-           text-gray-600 hover:text-gray-900 hover:bg-gray-100
+           text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-100 hover:bg-gray-100 dark:hover:bg-zinc-800/80
            transition-all duration-200 cursor-pointer;
   }
 
   .nav-item-active {
-    @apply bg-primary-50 text-primary-700 hover:bg-primary-100 hover:text-primary-800;
+    @apply bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-800 dark:hover:text-primary-300;
   }
 
   /* Status dots */
