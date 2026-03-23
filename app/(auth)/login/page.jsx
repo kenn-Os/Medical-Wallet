@@ -109,15 +109,15 @@ export default function LoginPage() {
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <div className="card p-8">
         <div className="mb-8">
-          <h1 className="font-display font-semibold text-2xl text-gray-900 mb-1">Welcome back</h1>
-          <p className="text-gray-500 text-sm">Sign in to access your health wallet</p>
+          <h1 className="font-display font-semibold text-2xl text-gray-900 dark:text-zinc-100 mb-1">Welcome back</h1>
+          <p className="text-gray-500 dark:text-zinc-400 text-sm">Sign in to access your health wallet</p>
         </div>
 
         {/* Google Sign-In */}
         <button
           onClick={handleGoogleSignIn}
           disabled={googleLoading}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors mb-6 disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-zinc-800 rounded-lg text-sm font-medium text-gray-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors mb-6 disabled:opacity-60"
         >
           {googleLoading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -133,8 +133,8 @@ export default function LoginPage() {
         </button>
 
         <div className="relative mb-6">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-          <div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or sign in with email</span></div>
+          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200 dark:border-zinc-800" /></div>
+          <div className="relative flex justify-center"><span className="bg-white dark:bg-zinc-950 px-3 text-xs text-gray-400 dark:text-zinc-500 italic">or sign in with email</span></div>
         </div>
 
         {showMfa ? (
@@ -154,7 +154,7 @@ export default function LoginPage() {
             <button type="submit" disabled={loading || mfaCode.length !== 6} className="btn-primary w-full py-3 justify-center">
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Verify Code'}
             </button>
-            <button type="button" onClick={() => { setShowMfa(false); createClient().auth.signOut() }} className="btn-ghost w-full py-2 justify-center text-sm">Cancel</button>
+            <button type="button" onClick={() => { setShowMfa(false); createClient().auth.signOut() }} className="btn-ghost w-full py-2 justify-center text-sm dark:text-zinc-400 dark:hover:text-zinc-200">Cancel</button>
           </form>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -170,7 +170,7 @@ export default function LoginPage() {
               </div>
               <div className="relative">
                 <input {...register('password')} type={showPassword ? 'text' : 'password'} placeholder="••••••••" className="input pr-10" autoComplete="current-password" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -182,9 +182,9 @@ export default function LoginPage() {
             </button>
           </form>
         )}
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 dark:text-zinc-400 mt-6">
           Don&apos;t have an account?{' '}
-          <Link href="/signup" className="text-primary-600 hover:text-primary-700 font-medium">Create wallet</Link>
+          <Link href="/signup" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">Create wallet</Link>
         </p>
       </div>
     </motion.div>

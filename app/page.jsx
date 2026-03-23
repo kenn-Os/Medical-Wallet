@@ -15,6 +15,7 @@ import {
   Stethoscope,
   ArrowRight,
 } from 'lucide-react'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 const features = [
   {
@@ -75,18 +76,19 @@ const stats = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-300">
       {/* Navigation */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-border dark:border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center shadow-sm">
                 <Heart className="w-4 h-4 text-white" />
               </div>
-              <span className="font-display font-semibold text-gray-900 text-lg">MedWallet</span>
+              <span className="font-display font-semibold text-gray-900 dark:text-zinc-100 text-lg">MedWallet</span>
             </div>
             <div className="flex items-center gap-3">
+              <ThemeToggle />
               <Link href="/login" className="btn-ghost text-sm">
                 Sign in
               </Link>
@@ -119,7 +121,7 @@ export default function HomePage() {
                 FHIR R4 Compatible · Global Healthcare Standard
               </span>
 
-              <h1 className="font-display font-semibold text-5xl sm:text-6xl lg:text-7xl text-gray-900 leading-tight mb-6">
+              <h1 className="font-display font-semibold text-5xl sm:text-6xl lg:text-7xl text-gray-900 dark:text-zinc-100 leading-tight mb-6">
                 Your health records,{' '}
                 <span className="text-primary-500 relative">
                   always with you
@@ -139,7 +141,7 @@ export default function HomePage() {
                 </span>
               </h1>
 
-              <p className="text-lg sm:text-xl text-gray-500 leading-relaxed mb-10 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-500 dark:text-zinc-400 leading-relaxed mb-10 max-w-2xl mx-auto">
                 A secure digital health wallet that puts you in complete control of your medical
                 data. Share with doctors, generate emergency QR codes, and access your records
                 anywhere in the world.
@@ -168,10 +170,10 @@ export default function HomePage() {
             >
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="font-display font-semibold text-2xl text-gray-900">
+                  <div className="font-display font-semibold text-2xl text-gray-900 dark:text-zinc-100">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-gray-500 mt-0.5">{stat.label}</div>
+                  <div className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">{stat.label}</div>
                 </div>
               ))}
             </motion.div>
@@ -184,23 +186,23 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-16 relative"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl bg-white">
+            <div className="relative rounded-2xl overflow-hidden border border-border dark:border-zinc-800 shadow-2xl bg-white dark:bg-zinc-900">
               {/* Mock Dashboard Header */}
-              <div className="bg-gray-50 border-b border-border px-6 py-4 flex items-center gap-3">
+              <div className="bg-gray-50 dark:bg-zinc-800/50 border-b border-border dark:border-zinc-800 px-6 py-4 flex items-center gap-3">
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-400" />
                   <div className="w-3 h-3 rounded-full bg-yellow-400" />
                   <div className="w-3 h-3 rounded-full bg-green-400" />
                 </div>
                 <div className="flex-1 flex justify-center">
-                  <div className="bg-white rounded-md px-4 py-1.5 text-xs text-gray-400 border border-border w-64 text-center">
+                  <div className="bg-white dark:bg-zinc-900 rounded-md px-4 py-1.5 text-xs text-gray-400 dark:text-zinc-500 border border-border dark:border-zinc-700 w-64 text-center">
                     medwallet.app/dashboard
                   </div>
                 </div>
               </div>
 
               {/* Mock Dashboard Content */}
-              <div className="p-6 bg-gradient-to-br from-gray-50 to-white min-h-[300px] flex gap-6">
+              <div className="p-6 bg-gradient-to-br from-gray-50 to-white dark:from-zinc-900 dark:to-zinc-950 min-h-[300px] flex gap-6">
                 {/* Sidebar */}
                 <div className="w-44 shrink-0 space-y-1">
                   {['Dashboard', 'Records', 'Documents', 'Emergency QR', 'Doctor Access'].map(
@@ -209,12 +211,12 @@ export default function HomePage() {
                         key={item}
                         className={`px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2 ${
                           i === 0
-                            ? 'bg-primary-50 text-primary-700'
-                            : 'text-gray-500 hover:bg-gray-100'
+                            ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400'
+                            : 'text-gray-500 dark:text-zinc-500 hover:bg-gray-100 dark:hover:bg-zinc-800'
                         }`}
                       >
                         <div
-                          className={`w-4 h-4 rounded ${i === 0 ? 'bg-primary-200' : 'bg-gray-200'}`}
+                          className={`w-4 h-4 rounded ${i === 0 ? 'bg-primary-200 dark:bg-primary-800' : 'bg-gray-200 dark:bg-zinc-700'}`}
                         />
                         {item}
                       </div>
@@ -230,24 +232,24 @@ export default function HomePage() {
                       { label: 'Allergies', value: '3', color: 'text-orange-600 bg-orange-50' },
                       { label: 'Medications', value: '2', color: 'text-blue-600 bg-blue-50' },
                     ].map((item) => (
-                      <div key={item.label} className="bg-white rounded-xl p-3 border border-border">
+                      <div key={item.label} className="bg-white dark:bg-zinc-900 rounded-xl p-3 border border-border dark:border-zinc-800 shadow-sm">
                         <div className={`text-lg font-semibold ${item.color} rounded-lg px-2 py-0.5 inline-block mb-1`}>
                           {item.value}
                         </div>
-                        <div className="text-xs text-gray-500">{item.label}</div>
+                        <div className="text-xs text-gray-500 dark:text-zinc-400">{item.label}</div>
                       </div>
                     ))}
                   </div>
-                  <div className="bg-white rounded-xl border border-border p-4">
-                    <div className="text-xs font-medium text-gray-700 mb-3">Recent Records</div>
+                  <div className="bg-white dark:bg-zinc-900 rounded-xl border border-border dark:border-zinc-800 p-4 shadow-sm">
+                    <div className="text-xs font-medium text-gray-700 dark:text-zinc-300 mb-3">Recent Records</div>
                     <div className="space-y-2">
                       {['Penicillin Allergy', 'Metformin 500mg', 'Type 2 Diabetes'].map((item) => (
                         <div
                           key={item}
                           className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0"
                         >
-                          <div className="text-xs text-gray-600">{item}</div>
-                          <div className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+                          <div className="text-xs text-gray-600 dark:text-zinc-400">{item}</div>
+                          <div className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400">
                             Verified
                           </div>
                         </div>
@@ -262,13 +264,13 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-zinc-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="font-display font-semibold text-4xl text-gray-900 mb-4">
+            <h2 className="font-display font-semibold text-4xl text-gray-900 dark:text-zinc-100 mb-4">
               Everything you need in one wallet
             </h2>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-500 dark:text-zinc-400 max-w-2xl mx-auto">
               Built for patients first, with the security and standards healthcare professionals
               trust.
             </p>
@@ -286,11 +288,11 @@ export default function HomePage() {
                   transition={{ delay: i * 0.05 }}
                   className="card card-hover p-6"
                 >
-                  <div className={`w-10 h-10 rounded-xl ${feature.bg} flex items-center justify-center mb-4`}>
+                  <div className={`w-10 h-10 rounded-xl ${feature.bg} dark:bg-zinc-800/50 flex items-center justify-center mb-4`}>
                     <Icon className={`w-5 h-5 ${feature.color}`} />
                   </div>
-                  <h3 className="font-display font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{feature.description}</p>
+                  <h3 className="font-display font-semibold text-gray-900 dark:text-zinc-100 mb-2">{feature.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">{feature.description}</p>
                 </motion.div>
               )
             })}
@@ -350,15 +352,15 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-zinc-950">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Stethoscope className="w-8 h-8 text-primary-600" />
+          <div className="w-16 h-16 bg-primary-50 dark:bg-primary-900/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Stethoscope className="w-8 h-8 text-primary-600 dark:text-primary-400" />
           </div>
-          <h2 className="font-display font-semibold text-4xl text-gray-900 mb-4">
+          <h2 className="font-display font-semibold text-4xl text-gray-900 dark:text-zinc-100 mb-4">
             Take control of your health data
           </h2>
-          <p className="text-lg text-gray-500 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-500 dark:text-zinc-400 mb-10 max-w-2xl mx-auto">
             Create your free medical wallet today. No credit card required. Your data, your rules.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -374,16 +376,16 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-gray-50 py-10">
+      <footer className="border-t border-border dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 bg-primary-500 rounded-lg flex items-center justify-center">
                 <Heart className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="font-display font-semibold text-gray-900">MedWallet</span>
+              <span className="font-display font-semibold text-gray-900 dark:text-zinc-100">MedWallet</span>
             </div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-400 dark:text-zinc-500">
               © {new Date().getFullYear()} MedWallet. Built for patient empowerment.
             </p>
           </div>

@@ -80,7 +80,7 @@ export default function DoctorOnboardingClient({ user }) {
           <div>
             <label className="label">Hospital / Clinic Name</label>
             <div className="relative">
-              <Building2 className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Building2 className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
               <input {...register('hospital_clinic')} className="input pl-10 focus:ring-teal-500" placeholder="City General Hospital" />
             </div>
             {errors.hospital_clinic && <p className="text-xs text-red-500 mt-1">{errors.hospital_clinic.message}</p>}
@@ -101,7 +101,7 @@ export default function DoctorOnboardingClient({ user }) {
 
           <div className="p-4 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-100 dark:border-zinc-800 flex gap-3 mt-6">
             <CheckCircle className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0" />
-            <p className="text-sm text-slate-600 dark:text-zinc-400">By registering, you agree to access patient records solely for the purpose of medical treatment and consultation as authorized by the patient's token.</p>
+            <p className="text-sm text-slate-600 dark:text-zinc-400">By registering, you agree to access patient records solely for the purpose of medical treatment and consultation as authorized by the patient&apos;s token.</p>
           </div>
 
           <button type="submit" disabled={loading} className="w-full py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-xl transition-colors flex justify-center items-center gap-2 mt-4">

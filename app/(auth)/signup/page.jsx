@@ -66,11 +66,11 @@ export default function SignupPage() {
     return (
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <div className="card p-8 text-center">
-          <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Mail className="w-8 h-8 text-green-600" />
+          <div className="w-16 h-16 bg-green-50 dark:bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Mail className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
-          <h2 className="font-display font-semibold text-xl text-gray-900 mb-2">Check your email</h2>
-          <p className="text-gray-500 text-sm mb-6">
+          <h2 className="font-display font-semibold text-xl text-gray-900 dark:text-zinc-100 mb-2">Check your email</h2>
+          <p className="text-gray-500 dark:text-zinc-400 text-sm mb-6">
             We sent a verification link to your email address. Click the link to activate your account.
           </p>
           <Link href="/login" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
@@ -85,15 +85,15 @@ export default function SignupPage() {
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <div className="card p-8">
         <div className="mb-8">
-          <h1 className="font-display font-semibold text-2xl text-gray-900 mb-1">Create your wallet</h1>
-          <p className="text-gray-500 text-sm">Secure, portable, patient-controlled health records</p>
+          <h1 className="font-display font-semibold text-2xl text-gray-900 dark:text-zinc-100 mb-1">Create your wallet</h1>
+          <p className="text-gray-500 dark:text-zinc-400 text-sm">Secure, portable, patient-controlled health records</p>
         </div>
 
         {/* Google Sign-In */}
         <button
           onClick={handleGoogleSignIn}
           disabled={googleLoading}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors mb-6 disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-zinc-800 rounded-lg text-sm font-medium text-gray-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors mb-6 disabled:opacity-60"
         >
           {googleLoading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -109,8 +109,8 @@ export default function SignupPage() {
         </button>
 
         <div className="relative mb-6">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-          <div className="relative flex justify-center text-xs text-gray-400 bg-white px-3"><span className="bg-white px-2">or sign up with email</span></div>
+          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200 dark:border-zinc-800" /></div>
+          <div className="relative flex justify-center text-xs text-gray-400 dark:text-zinc-500 bg-white dark:bg-zinc-950 px-3"><span className="bg-white dark:bg-zinc-950 px-2 italic">or sign up with email</span></div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -139,18 +139,18 @@ export default function SignupPage() {
             <input {...register('confirm_password')} type={showPassword ? 'text' : 'password'} className="input" placeholder="Repeat your password" />
             {errors.confirm_password && <p className="text-xs text-red-500 mt-1">{errors.confirm_password.message}</p>}
           </div>
-          <div className="flex items-start gap-2.5 p-3 rounded-lg bg-primary-50 border border-primary-100">
-            <ShieldCheck className="w-4 h-4 text-primary-600 mt-0.5 shrink-0" />
-            <p className="text-xs text-primary-700 leading-relaxed">Your data is encrypted with AES-256. We never sell your health information.</p>
+          <div className="flex items-start gap-2.5 p-3 rounded-lg bg-primary-50 dark:bg-primary-500/10 border border-primary-100 dark:border-primary-500/20">
+            <ShieldCheck className="w-4 h-4 text-primary-600 dark:text-primary-400 mt-0.5 shrink-0" />
+            <p className="text-xs text-primary-700 dark:text-primary-300 leading-relaxed">Your data is encrypted with AES-256. We never sell your health information.</p>
           </div>
           <button type="submit" disabled={loading} className="btn-primary w-full py-3 mt-2">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
             {loading ? 'Creating wallet...' : 'Create wallet'}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 dark:text-zinc-400 mt-6">
           Already have an account?{' '}
-          <Link href="/login" className="text-primary-600 hover:text-primary-700 font-medium">Sign in</Link>
+          <Link href="/login" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">Sign in</Link>
         </p>
       </div>
     </motion.div>

@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
       className={`${sora.variable} ${dmSans.variable} ${dmMono.variable}`}
       suppressHydrationWarning
     >
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
           <Toaster

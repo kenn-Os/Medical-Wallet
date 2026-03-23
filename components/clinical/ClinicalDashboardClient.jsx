@@ -69,17 +69,17 @@ export default function ClinicalDashboardClient({ doctorProfile }) {
         </div>
       </div>
 
-      <div className="card p-8 border-t-4 border-t-slate-800 dark:border-t-slate-200">
+      <div className="card p-8 border-t-4 border-t-slate-800 dark:border-t-zinc-200">
         <div className="text-center mb-6">
           <h3 className="font-display font-semibold text-xl text-slate-900 dark:text-zinc-100 mb-2">Access Patient Records</h3>
-          <p className="text-sm text-slate-500 dark:text-zinc-400">Enter the patient's MedWallet ID and the 6-digit access token provided to you.</p>
+          <p className="text-sm text-slate-500 dark:text-zinc-400">Enter the patient&apos;s MedWallet ID and the 6-digit access token provided to you.</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
             <label className="label text-slate-700 dark:text-zinc-300">MedWallet Health ID</label>
             <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
               <input 
                 {...register('health_id')} 
                 className="input pl-10 focus:ring-teal-500 uppercase font-mono tracking-wider" 
@@ -92,7 +92,7 @@ export default function ClinicalDashboardClient({ doctorProfile }) {
           <div>
             <label className="label text-slate-700 dark:text-zinc-300">6-Digit Access Token</label>
             <div className="relative">
-              <Key className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Key className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
               <input 
                 {...register('token')} 
                 maxLength={6}

@@ -74,7 +74,7 @@ export default function Sidebar({ user, profile }) {
         </div>
       </div>
       <div className="px-3 pb-4">
-        <button onClick={handleLogout} disabled={loggingOut} className="nav-item w-full text-red-600 hover:bg-red-50 hover:text-red-700">
+        <button onClick={handleLogout} disabled={loggingOut} className="nav-item w-full text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 hover:text-red-700 dark:hover:text-red-300">
           <LogOut className="w-4 h-4" /><span>{loggingOut ? 'Signing out...' : 'Sign out'}</span>
         </button>
       </div>
