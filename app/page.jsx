@@ -92,6 +92,10 @@ export default function HomePage() {
               <Link href="/login" className="btn-ghost text-sm">
                 Sign in
               </Link>
+              <Link href="/clinical" className="hidden lg:flex btn-ghost text-sm items-center gap-1.5 text-teal-600 dark:text-teal-400">
+                <Stethoscope className="w-3.5 h-3.5" />
+                Clinical Portal
+              </Link>
               <Link href="/signup" className="btn-primary text-sm">
                 Get started
               </Link>
@@ -157,6 +161,12 @@ export default function HomePage() {
                   className="btn-secondary text-base px-8 py-3 flex items-center gap-2"
                 >
                   Sign in to dashboard
+                </Link>
+                <Link
+                  href="/clinical"
+                  className="text-sm font-medium text-slate-500 dark:text-zinc-500 hover:text-teal-600 dark:hover:text-teal-400 transition-colors flex items-center gap-2 mt-4 sm:mt-0"
+                >
+                  Are you a healthcare provider? <span className="underline">Access Clinical Portal</span>
                 </Link>
               </div>
             </motion.div>
@@ -385,9 +395,12 @@ export default function HomePage() {
               </div>
               <span className="font-display font-semibold text-gray-900 dark:text-zinc-100">MedWallet</span>
             </div>
-            <p className="text-sm text-gray-400 dark:text-zinc-500">
-              © {new Date().getFullYear()} MedWallet. Built for patient empowerment.
-            </p>
+            <div className="flex items-center gap-6">
+              <Link href="/clinical" className="text-xs font-medium text-gray-500 dark:text-zinc-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Healthcare Providers</Link>
+              <p className="text-sm text-gray-400 dark:text-zinc-500">
+                © {new Date().getFullYear()} MedWallet. Built for patient empowerment.
+              </p>
+            </div>
           </div>
         </div>
       </footer>

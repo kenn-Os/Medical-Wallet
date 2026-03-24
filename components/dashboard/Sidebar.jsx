@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, LayoutDashboard, FileText, FolderOpen, QrCode, UserCheck, User, Settings, LogOut, Menu, X, ChevronRight, Shield, CreditCard } from 'lucide-react'
+import { Heart, LayoutDashboard, FileText, FolderOpen, QrCode, UserCheck, User, Settings, LogOut, Menu, X, ChevronRight, Shield, CreditCard, Stethoscope } from 'lucide-react'
 import { cn, getInitials } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
@@ -17,6 +17,7 @@ const navItems = [
   { href: '/doctor-access', label: 'Doctor Access', icon: UserCheck },
   { href: '/profile', label: 'My Profile', icon: User },
   { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/clinical', label: 'Clinical Portal', icon: Stethoscope, isSpecial: true },
 ]
 
 export default function Sidebar({ user, profile }) {
@@ -59,7 +60,7 @@ export default function Sidebar({ user, profile }) {
           const Icon = item.icon
           const isActive = pathname === item.href
           return (
-            <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={cn('nav-item', isActive && 'nav-item-active')}>
+            <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={cn('nav-item', isActive && 'nav-item-active', item.isSpecial && 'text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300')}>
               <Icon className="w-4 h-4 shrink-0" />
               <span>{item.label}</span>
               {isActive && <ChevronRight className="w-3.5 h-3.5 ml-auto opacity-50" />}

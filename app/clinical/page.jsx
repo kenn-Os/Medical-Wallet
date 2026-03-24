@@ -33,7 +33,7 @@ export default async function ClinicalPage() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           <Link href="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-            Patient Dashboard
+            Dashboard
           </Link>
         </div>
       </header>

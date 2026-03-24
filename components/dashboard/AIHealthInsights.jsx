@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, Brain, AlertCircle, Heart, CheckCircle2, Loader2, ChevronDown, ChevronUp } from 'lucide-react'
+import { Sparkles, Brain, AlertCircle, Heart, CheckCircle2, Loader2, ChevronDown, ChevronUp, Pill, Activity } from 'lucide-react'
 
 export default function AIHealthInsights({ profile, allergies, medications, conditions }) {
   const [analyzing, setAnalyzing] = useState(true)
@@ -9,36 +9,39 @@ export default function AIHealthInsights({ profile, allergies, medications, cond
   const [insights, setInsights] = useState([])
 
   useEffect(() => {
-    // Simulate AI connection and analysis delay
-    const timer = setTimeout(() => {
-      const generatedInsights = []
-      
-      // 1. Core Profile Analysis
-      if (!profile.blood_type || profile.blood_type === 'Unknown') {
-        generatedInsights.push({ type: 'warning', icon: Heart, title: 'Missing Critical Data', desc: 'Your blood type is unknown. We highly recommend updating this for emergency responders.' })
-      } else {
-        generatedInsights.push({ type: 'success', icon: CheckCircle2, title: 'Profile Ready', desc: `Your core identity including blood type (${profile.blood_type}) is documented.` })
-      }
+    async function fetchInsights() {
+      try {
+        const response = await fetch('/api/analyze-health', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile, allergies, medications, conditions }),
+        })
 
-      // 2. Allergy Analysis
-      const severeAllergies = allergies.filter(a => a.severity === 'severe')
-      if (severeAllergies.length > 0) {
-        generatedInsights.push({ type: 'danger', icon: AlertCircle, title: 'Severe Allergies Detected', desc: `You have ${severeAllergies.length} severe allerg${severeAllergies.length > 1 ? 'ies' : 'y'}. Ensure your Emergency QR is always accessible.` })
+        const data = await response.json()
+        if (data.insights) {
+          // Map icon names to components
+          const iconMap = { Brain, AlertCircle, Heart, CheckCircle2, Pill, Activity }
+          const mappedInsights = data.insights.map(i => ({
+            ...i,
+            icon: iconMap[i.icon] || Sparkles
+          }))
+          setInsights(mappedInsights)
+        } else if (data.error) {
+          setInsights([{ type: 'danger', icon: AlertCircle, title: 'Analysis Error', desc: data.details || data.error }])
+        }
+      } catch (err) {
+        console.error('Failed to fetch AI insights:', err)
+        setInsights([{ type: 'info', icon: Brain, title: 'Unavailable', desc: 'AI Health Insights are temporarily unavailable. Check your connection.' }])
+      } finally {
+        setAnalyzing(false)
       }
+    }
 
-      // 3. Condition & Med Correlation (Mocked logic)
-      const activeConditions = conditions.filter(c => c.status === 'active')
-      if (activeConditions.length > 0 && medications.length === 0) {
-        generatedInsights.push({ type: 'info', icon: Brain, title: 'Medication Check', desc: `You have ${activeConditions.length} active condition(s) but no current medications tracked. Consider updating your medication list if you are prescribed anything.` })
-      } else if (activeConditions.length > 0) {
-        generatedInsights.push({ type: 'info', icon: Brain, title: 'Condition Management', desc: `Tracking ${activeConditions.length} active condition(s) with ${medications.length} medication(s). Keep up with your scheduled doses.` })
-      }
-
-      setInsights(generatedInsights)
+    if (profile && (allergies || medications || conditions)) {
+      fetchInsights()
+    } else {
       setAnalyzing(false)
-    }, 2500) // 2.5s simulated delay
-
-    return () => clearTimeout(timer)
+    }
   }, [profile, allergies, medications, conditions])
 
   const getIconColor = (type) => {
