@@ -26,7 +26,10 @@ export default function LoginPage() {
   const [mfaCode, setMfaCode] = useState('')
   const [factorId, setFactorId] = useState(null)
 
-  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) })
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: { email: '', password: '' },
+  })
 
   const onSubmit = async (data) => {
     setLoading(true)
